@@ -15,18 +15,37 @@ export class JsonFormat extends FieldFormat {
 	}
 
 	// 4. Implement a conversion function
-	htmlConvert: HtmlContextTypeConvert = (val) => {
-		const { isJson, value } = getFormattedJson(String(val))
-		if(!isJson) {
-			return value
-		}
+  htmlConvert: HtmlContextTypeConvert = (val) => {
+    const { isJson, value } = getFormattedJson(String(val));
 
-		return `<pre class='json-field'>${syntaxHighlightFormattedJson(value)}</pre>`
-	}
+    // Detect if we are inside the DocViewerFlyout
+    const inDocViewer =
+      typeof document !== 'undefined' &&
+      // document.querySelector('.kbnDocViewer');
+      document.querySelector('.kbnDocViewer, .kbnDocViewer__flyout')
+
+    // Debug
+    // console.log('[json] val:', val);
+    // console.log('[json] isJson:', isJson);
+    // console.log('[json] inDocViewer:', !!inDocViewer);
+
+    // If not JSON or not inside flyout → return plain
+    if (!isJson || !inDocViewer) {
+      return value;
+    }
+
+    // Highlight only inside DocViewerFlyout
+    return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
+  }
 
 	textConvert: TextContextTypeConvert = (val) => {
-		return getFormattedJson(String(val)).value
-	}
+    function extracted() {
+      // console.log('[json] TextContextTypeConvert:', String(val));
+      return getFormattedJson(String(val)).value
+    }
+
+    return extracted();
+  }
 }
 
 // add options for the format to be edited if required

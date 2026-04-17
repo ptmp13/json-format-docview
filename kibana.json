@@ -11,7 +11,8 @@
   "ui": true,
   "requiredPlugins": [
     "fieldFormats",
-    "dataViewFieldEditor"
+    "dataViewFieldEditor",
+    "unifiedDocViewer"
   ],
   "optionalPlugins": []
 }

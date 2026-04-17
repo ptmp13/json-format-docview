@@ -22,6 +22,7 @@ export class JsonContentPlugin implements Plugin<void, void, SetupDeps, CoreOpts
 		deps.dataViewFieldEditor?.fieldFormatEditors
 			?.register(JsonFormatEditorFactory)
 		console.log('json_content: Setup')
+
 	}
 
 	public start() {
