@@ -1,3 +1,7 @@
+# Some fix
+
+Format JSON only in DocView Tab.
+
 # JSON Content
 
 A Kibana plugin to pretty print JSON strings in the Kibana Discover/Logs tab. This doesn't index the JSON content, it just pretty prints & highlights it in the console for easier reading.
