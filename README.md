@@ -22,7 +22,7 @@ The plugin archive is pushed to the `build` folder & committed to the repository
 
 1. Install in Kibana via:
    ```bash
-   bin/kibana-plugin install https://github.com/adiwajshing/kibana-json-content/raw/refs/heads/master/build/jsonContent-8.15.0.zip
+   bin/kibana-plugin install https://github.com/ptmp13/kibana-json-content/releases/download/v9.3.0/jsonContent-9.3.0.zip
    ```
 2. If you're running on Kubernetes, you can use [this guide](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-custom-images.html).
 
