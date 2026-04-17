@@ -5,6 +5,9 @@
 field_formats id is __'json'__
 3. Test it work in Kibana 9.3.0
 
+![Only DocView Tab](/images/onlyDocView.png)
+
+
 # JSON Content
 
 A Kibana plugin to pretty print JSON strings in the Kibana Discover/Logs tab. This doesn't index the JSON content, it just pretty prints & highlights it in the console for easier reading.
