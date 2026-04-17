@@ -5,7 +5,7 @@
 field_formats id is __'json'__
 3. Test it work in Kibana 9.3.0
 
-![Only DocView Tab](/images/onlyDocView.png)
+![Only DocView Tab](/images/onlyDocView-1.png)
 
 
 # JSON Content
