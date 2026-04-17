@@ -1,6 +1,9 @@
 # Some fix
 
-Format JSON only in DocView Tab.
+1. Format JSON only in DocView Tab.
+2. Add Server Side for import from terraform like using elasticstack_kibana_data_view module.
+field_formats id is __'json'__
+3. Test it work in Kibana 9.3.0
 
 # JSON Content
 
