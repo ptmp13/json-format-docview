@@ -25,9 +25,10 @@ export class JsonContentPlugin implements Plugin<void, void, SetupDeps, CoreOpts
 
 	}
 
-	public start() {
-		return {}
-	}
+  public start() {
+    console.log('json_content: STart')
+
+  }
 
 	public stop() {}
 }
