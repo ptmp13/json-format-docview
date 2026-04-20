@@ -4,27 +4,6 @@ import { KBN_FIELD_TYPES } from '@kbn/field-types'
 
 // 1. Create a custom formatter by extending {@link FieldFormat}
 
-export function waitForFlyoutClose(): Promise<void> {
-  return new Promise((resolve) => {
-    const handler = (e: Event) => {
-      const target = e.target as HTMLElement;
-
-      if (target.closest('[data-test-subj="euiFlyoutCloseButton"]')) {
-        document.body.removeEventListener('click', handler);
-        resolve();
-      }
-    };
-
-    document.body.addEventListener('click', handler);
-  });
-}
-
-async function runAfterFlyoutClose() {
-  console.log('Waiting for flyout close...');
-  await waitForFlyoutClose();
-  console.log('Flyout closed!');
-}
-
 export class JsonFormat extends FieldFormat {
 	static id = 'json'
 	static title = 'JSON'
@@ -37,7 +16,7 @@ export class JsonFormat extends FieldFormat {
 	}
 
 	// 4. Implement a conversion function
-  htmlConvert: HtmlContextTypeConvert = (val) => {
+  htmlConvert: HtmlContextTypeConvert = (val,opts) => {
     const { isJson, value } = getFormattedJson(String(val));
     // let flyoutClosed = false;
     // Detect if we are inside the DocViewerFlyout
@@ -50,13 +29,29 @@ export class JsonFormat extends FieldFormat {
     // const inDocViewerFalse = !!document.querySelector('.TROLROLR');
 
     // Debug
-    console.log('[json] val:', val);
-    console.log('[json] isJson:', isJson);
-    console.log('[json] inDocViewer:', !!inDocViewer);
-    const flyoutClosed = runAfterFlyoutClose();
-    console.log('[json] flyoutClosed:', flyoutClosed);
+    // console.log('[json] val:', val);
+    // console.log('[json] isJson:', isJson);
+    // console.log('[json] inDocViewer:', !!inDocViewer);
+    // console.log('[json] flyoutClosed:', flyoutClosed);
 
+    const popover = document.querySelector('[data-popover-open="true"]');
 
+    if (popover) {
+      const checkp = popover.querySelector('.unifiedDataTable__cellPopoverValue');
+      if (checkp) {
+        return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
+      } else {
+        return "checkp"
+      }
+    } else {
+      return "popover"
+    }
+        // const popover = document.querySelector('[data-popover-open="true"]');
+    // if (isJson && inDocViewer) {
+    //   return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
+    // } else {
+    //   return "tororl"
+    // }
     // console.log('[json] inDocViewerFalse:', !!inDocViewerFalse);
 
     // If not JSON or not inside flyout → return plain
@@ -68,15 +63,15 @@ export class JsonFormat extends FieldFormat {
     // if (isJson && inDocViewer) {
     //   return "IN!!";
     // }
-    if (isJson && inDocViewer) {
-      if (flyoutClosed) {
-        return val
-      } else {
-        return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
-      }
-    } else {
-      return val;
-    }
+    // if (isJson && inDocViewer) {
+    //   if (flyoutClosed) {
+    //     return val
+    //   } else {
+    //     return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
+    //   }
+    // } else {
+    //   return val;
+    // }
 
     // return val;
     // if (!inDocViewerFalse) {

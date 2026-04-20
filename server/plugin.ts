@@ -8,6 +8,7 @@ interface SetupDeps {
 
 interface StartDeps {
   fieldFormats: FieldFormatsStart;
+  core: CoreSetup;
 }
 
 export class FieldFormatsJsonPlugin implements Plugin<void, void, SetupDeps, StartDeps> {
