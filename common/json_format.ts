@@ -17,16 +17,9 @@ export class JsonFormat extends FieldFormat {
 
 	// 4. Implement a conversion function
   htmlConvert: HtmlContextTypeConvert = (val,opts) => {
-    const { isJson, value } = getFormattedJson(String(val));
-    // let flyoutClosed = false;
-    // Detect if we are inside the DocViewerFlyout
-    const inDocViewer =
-      typeof document !== 'undefined' &&
-      // document.querySelector('.kbnDocViewer');
-      // document.querySelector('.kbnDocViewer, .euiDataGridRowCell--popover')
-      !!document.querySelector('.euiFlyoutHeader, .euiPopover__panel');
-
-    // const inDocViewerFalse = !!document.querySelector('.TROLROLR');
+    const { isJson, inDocViewer, value } = getFormattedJson(String(val));
+    console.log(inDocViewer);
+    console.log(val);
 
     // Debug
     // console.log('[json] val:', val);
@@ -34,51 +27,11 @@ export class JsonFormat extends FieldFormat {
     // console.log('[json] inDocViewer:', !!inDocViewer);
     // console.log('[json] flyoutClosed:', flyoutClosed);
 
-    const popover = document.querySelector('[data-popover-open="true"]');
-
-    if (popover) {
-      const checkp = popover.querySelector('.unifiedDataTable__cellPopoverValue');
-      if (checkp) {
-        return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
-      } else {
-        return "checkp"
-      }
-    } else {
-      return "popover"
-    }
-        // const popover = document.querySelector('[data-popover-open="true"]');
-    // if (isJson && inDocViewer) {
-    //   return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
-    // } else {
-    //   return "tororl"
-    // }
-    // console.log('[json] inDocViewerFalse:', !!inDocViewerFalse);
-
     // If not JSON or not inside flyout → return plain
-    // if (!isJson || inDocViewer) {
-    //   return val;
-    // }
-
-    // Highlight only inside DocViewerFlyout
-    // if (isJson && inDocViewer) {
-    //   return "IN!!";
-    // }
-    // if (isJson && inDocViewer) {
-    //   if (flyoutClosed) {
-    //     return val
-    //   } else {
-    //     return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
-    //   }
-    // } else {
-    //   return val;
-    // }
-
-    // return val;
-    // if (!inDocViewerFalse) {
-    //   return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
-    // } else {
-    //   return "zaza"
-    // }
+    if (!isJson) {
+      return val;
+    }
+    return `<pre class="json-field">${syntaxHighlightFormattedJson(value)}</pre>`;
   }
 
 	textConvert: TextContextTypeConvert = (val) => {
@@ -137,7 +90,7 @@ function getFormattedJson(value: string) {
 		const obj = JSON.parse(value)
 		return {
 			isJson: true,
-      inDocViewer: false,
+      inDocViewer: true,
 			value: JSON.stringify(obj, null, 2)
 		}
 	} catch{
