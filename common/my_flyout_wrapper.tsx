@@ -9,14 +9,115 @@ import {
   EuiBadge,
   EuiFlexGroup,
   EuiFlexItem,
-  EuiCodeBlock,
 } from '@elastic/eui';
 import type { DataView } from '@kbn/data-views-plugin/public';
+import { CodeEditor } from '@kbn/code-editor';
 
 interface MyFlyoutWrapperProps {
   hit: any;
   dataView: DataView;
 }
+
+// Custom Highlighted CodeEditor Component
+const HighlightedCodeEditor: React.FC<{
+  value: string;
+  highlightedValue: string;
+  formattedValue: any;
+}> = ({ value, highlightedValue, formattedValue }) => {
+  const { jsonString, decorations } = useMemo(() => {
+    const jsonStr = JSON.stringify(formattedValue, null, 2);
+    
+    // Find highlighted terms
+    const highlightRegex = /@kibana-highlighted-field@(.*?)@\/kibana-highlighted-field@/g;
+    const matches = [...highlightedValue.matchAll(highlightRegex)];
+    
+    if (matches.length === 0) {
+      return { jsonString: jsonStr, decorations: [] };
+    }
+    
+    // Find all occurrences of highlighted terms in the JSON string
+    const decorationsList: any[] = [];
+    const lines = jsonStr.split('\n');
+    
+    matches.forEach((match) => {
+      const term = match[1];
+      
+      lines.forEach((line, lineIndex) => {
+        let columnIndex = 0;
+        let searchIndex = 0;
+        
+        while ((searchIndex = line.indexOf(term, columnIndex)) !== -1) {
+          decorationsList.push({
+            range: {
+              startLineNumber: lineIndex + 1,
+              startColumn: searchIndex + 1,
+              endLineNumber: lineIndex + 1,
+              endColumn: searchIndex + term.length + 1,
+            },
+            options: {
+              inlineClassName: 'monaco-highlight-search-term',
+              className: 'monaco-highlight-search-term-line',
+            },
+          });
+          
+          columnIndex = searchIndex + term.length;
+        }
+      });
+    });
+    
+    return { jsonString: jsonStr, decorations: decorationsList };
+  }, [formattedValue, highlightedValue]);
+
+  return (
+    <>
+      <style>
+        {`
+          .monaco-highlight-search-term {
+            background-color: #fef3c0 !important;
+            border-radius: 2px;
+            padding: 0 2px;
+            font-weight: 600;
+            box-shadow: 0 0 0 1px rgba(254, 243, 192, 0.8);
+          }
+          .monaco-highlight-search-term-line {
+            background-color: rgba(254, 243, 192, 0.1);
+          }
+        `}
+      </style>
+      <EuiPanel hasBorder paddingSize="none" style={{ overflow: 'hidden' }}>
+        <CodeEditor
+          languageId="json"
+          value={jsonString}
+          onChange={() => {}}
+          editorDidMount={(editor) => {
+            // Apply decorations after editor mounts
+            if (decorations.length > 0) {
+              editor.deltaDecorations([], decorations);
+            }
+          }}
+          options={{
+            readOnly: true,
+            lineNumbers: 'on',
+            fontSize: 13,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
+            wrappingIndent: 'indent',
+            automaticLayout: true,
+            fixedOverflowWidgets: true,
+            folding: true,
+            renderLineHighlight: 'none',
+            scrollbar: {
+              vertical: 'auto',
+              horizontal: 'auto',
+            },
+          }}
+          height="500px"
+        />
+      </EuiPanel>
+    </>
+  );
+};
 
 export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -25,7 +126,16 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
   // Extract all fields that have fieldFormatMap set to 'json'
   const jsonFormattedFields = useMemo(() => {
     const fieldFormatMap = dataView.fieldFormatMap || {};
-    const jsonFields: Array<{ fieldName: string; value: any; formattedValue: any; parseError?: string }> = [];
+    const jsonFields: Array<{ 
+      fieldName: string; 
+      value: any; 
+      formattedValue: any; 
+      highlightedValue?: string;
+      parseError?: string;
+    }> = [];
+
+    // Get highlights from hit
+    const highlights = hit.raw?.highlight || {};
 
     // Iterate through fieldFormatMap to find fields with 'json' format
     Object.entries(fieldFormatMap).forEach(([fieldName, format]: [string, any]) => {
@@ -39,10 +149,14 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
             const value = Array.isArray(rawValue) ? rawValue[0] : rawValue;
             const parsedValue = typeof value === 'string' ? JSON.parse(value) : value;
             
+            // Check if this field has highlights
+            const highlightValue = highlights[fieldName]?.[0];
+            
             jsonFields.push({
               fieldName,
               value,
               formattedValue: parsedValue,
+              highlightedValue: highlightValue,
             });
           } catch (e) {
             // If parsing fails, show error
@@ -84,6 +198,13 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
               <EuiFlexItem grow={false}>
                 <span>{field.fieldName}</span>
               </EuiFlexItem>
+              {field.highlightedValue && (
+                <EuiFlexItem grow={false}>
+                  <EuiBadge color="warning" iconType="searchProfilerApp">
+                    Match
+                  </EuiBadge>
+                </EuiFlexItem>
+              )}
               {field.parseError && (
                 <EuiFlexItem grow={false}>
                   <EuiBadge color="danger" iconType="alert">
@@ -139,7 +260,9 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
               </EuiPopover>
             </EuiFlexItem>
             <EuiFlexItem grow={false}>
-              <EuiBadge color="hollow">{jsonFormattedFields.length} field{jsonFormattedFields.length !== 1 ? 's' : ''}</EuiBadge>
+              <EuiBadge color="hollow">
+                {jsonFormattedFields.length} field{jsonFormattedFields.length !== 1 ? 's' : ''}
+              </EuiBadge>
             </EuiFlexItem>
           </EuiFlexGroup>
 
@@ -157,22 +280,46 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
                   <EuiText size="s">
                     <strong>Raw value:</strong>
                   </EuiText>
-                  <EuiCodeBlock language="text" fontSize="s" paddingSize="m">
+                  <pre style={{ fontSize: '12px', overflow: 'auto' }}>
                     {typeof currentFieldData.value === 'string' 
                       ? currentFieldData.value 
                       : JSON.stringify(currentFieldData.value)}
-                  </EuiCodeBlock>
+                  </pre>
                 </EuiPanel>
+              ) : currentFieldData.highlightedValue ? (
+                // Show highlighted version with Monaco
+                <HighlightedCodeEditor
+                  value={currentFieldData.value}
+                  highlightedValue={currentFieldData.highlightedValue}
+                  formattedValue={currentFieldData.formattedValue}
+                />
               ) : (
-                <EuiCodeBlock 
-                  language="json" 
-                  fontSize="m" 
-                  paddingSize="m"
-                  isCopyable
-                  overflowHeight={500}
-                >
-                  {JSON.stringify(currentFieldData.formattedValue, null, 2)}
-                </EuiCodeBlock>
+                // No highlights, show normal Monaco editor
+                <EuiPanel hasBorder paddingSize="none" style={{ overflow: 'hidden' }}>
+                  <CodeEditor
+                    languageId="json"
+                    value={JSON.stringify(currentFieldData.formattedValue, null, 2)}
+                    onChange={() => {}}
+                    options={{
+                      readOnly: true,
+                      lineNumbers: 'on',
+                      fontSize: 13,
+                      minimap: { enabled: false },
+                      scrollBeyondLastLine: false,
+                      wordWrap: 'on',
+                      wrappingIndent: 'indent',
+                      automaticLayout: true,
+                      fixedOverflowWidgets: true,
+                      folding: true,
+                      renderLineHighlight: 'none',
+                      scrollbar: {
+                        vertical: 'auto',
+                        horizontal: 'auto',
+                      },
+                    }}
+                    height="500px"
+                  />
+                </EuiPanel>
               )}
             </>
           )}
