@@ -12,6 +12,7 @@ import type {
   DiscoverSetup,
   DiscoverStart,
 } from '@kbn/discover-plugin/public';
+import { type UiActionsSetup, type UiActionsStart } from '@kbn/ui-actions-plugin/public';
 
 type SetupDeps = {
   fieldFormats: FieldFormatsSetup
@@ -19,11 +20,13 @@ type SetupDeps = {
   unifiedDocViewer: UnifiedDocViewerSetup
   data: DataPublicPluginStart
   discover: DiscoverSetup;
+  uiActions: UiActionsSetup
 }
 type CoreOpts = {
   fieldFormats: FieldFormatsStart
   dataViewFieldEditor: IndexPatternFieldEditorStart
   data: DataPublicPluginStart
+  uiActions: UiActionsStart
   discover: DiscoverStart
 }
 
@@ -32,17 +35,38 @@ export class JsonContentPlugin implements Plugin<void, void, SetupDeps, CoreOpts
     deps.fieldFormats.register([JsonFormat])
 		deps.dataViewFieldEditor?.fieldFormatEditors
 			?.register(JsonFormatEditorFactory)
+
+    deps.uiActions.registerAction({
+      id: 'my-row-click-logger',
+      type: 'my-row-click-logger',
+      getDisplayName: () => 'Log Row',
+      isCompatible: async () => true,
+      execute: async (ctx) => {
+        console.log('🟢 ROW CLICKED', ctx);
+      },
+    });
+
     deps.unifiedDocViewer.registry.add({
       id: 'my_view',
       title: 'My View',
       order: 10,
       render: MyFlyoutWrapper
     });
-		console.log('json_content: Setup')
 	}
 
-  public start() {
-    console.log('json_content: STart')
+  public start(_: CoreStart, plugins: CoreOpts) {
+    console.log('json_content: Start');
+    const allTriggers = (plugins.uiActions as any).triggers ??
+      (plugins.uiActions as any)._triggers ??
+      (plugins.uiActions as any).triggerToActions;
+    console.log('all triggers:', allTriggers);
+    // Log all known triggers to find the right one
+    try {
+      const triggers = (plugins.uiActions as any).triggers;
+      console.log('Available triggers:', Object.keys(triggers ?? {}));
+    } catch (e) {
+      console.warn('Could not read triggers', e);
+    }
     // discoverStart = plugins.discover;
   }
 

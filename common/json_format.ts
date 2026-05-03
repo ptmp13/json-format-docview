@@ -18,8 +18,8 @@ export class JsonFormat extends FieldFormat {
 	// 4. Implement a conversion function
   htmlConvert: HtmlContextTypeConvert = (val,opts) => {
     const { isJson, inDocViewer, value } = getFormattedJson(String(val));
-    console.log(inDocViewer);
-    console.log(val);
+    console.log('inDocViewer: ',inDocViewer);
+    console.log('val: ',val);
 
     // Debug
     // console.log('[json] val:', val);

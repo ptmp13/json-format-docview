@@ -12,7 +12,10 @@
   "requiredPlugins": [
     "fieldFormats",
     "dataViewFieldEditor",
-    "unifiedDocViewer"
+    "unifiedDocViewer",
+    "uiActions",
+    "discover",
+    "data"
   ],
   "optionalPlugins": []
 }
