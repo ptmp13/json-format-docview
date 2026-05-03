@@ -45,18 +45,18 @@ export class JsonContentPlugin implements Plugin<void, void, SetupDeps, CoreOpts
 	}
 
   public start(_: CoreStart, plugins: CoreOpts) {
-    console.log('json_content: Start');
-    const allTriggers = (plugins.uiActions as any).triggers ??
-      (plugins.uiActions as any)._triggers ??
-      (plugins.uiActions as any).triggerToActions;
-    console.log('all triggers:', allTriggers);
-    // Log all known triggers to find the right one
-    try {
-      const triggers = (plugins.uiActions as any).triggers;
-      console.log('Available triggers:', Object.keys(triggers ?? {}));
-    } catch (e) {
-      console.warn('Could not read triggers', e);
-    }
+    // console.log('json_content: Start');
+    // const allTriggers = (plugins.uiActions as any).triggers ??
+    //   (plugins.uiActions as any)._triggers ??
+    //   (plugins.uiActions as any).triggerToActions;
+    // console.log('all triggers:', allTriggers);
+    // // Log all known triggers to find the right one
+    // try {
+    //   const triggers = (plugins.uiActions as any).triggers;
+    //   console.log('Available triggers:', Object.keys(triggers ?? {}));
+    // } catch (e) {
+    //   console.warn('Could not read triggers', e);
+    // }
     // discoverStart = plugins.discover;
   }
 
