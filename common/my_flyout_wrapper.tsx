@@ -13,6 +13,9 @@ import {
 import type { DataView } from '@kbn/data-views-plugin/public';
 import { CodeEditor } from '@kbn/code-editor';
 
+// Import the CSS file
+import '../public/monokai_theme.scss';
+
 interface MyFlyoutWrapperProps {
   hit: any;
   dataView: DataView;
@@ -69,53 +72,59 @@ const HighlightedCodeEditor: React.FC<{
   }, [formattedValue, highlightedValue]);
 
   return (
-    <>
-      <style>
-        {`
-          .monaco-highlight-search-term {
-            background-color: #fef3c0 !important;
-            border-radius: 2px;
-            padding: 0 2px;
-            font-weight: 600;
-            box-shadow: 0 0 0 1px rgba(254, 243, 192, 0.8);
+    <EuiPanel 
+      hasBorder 
+      paddingSize="none" 
+      style={{ 
+        overflow: 'hidden',
+        backgroundColor: '#2d2a2e',
+      }}
+    >
+      <CodeEditor
+        languageId="json"
+        value={jsonString}
+        onChange={() => {}}
+        editorDidMount={(editor) => {
+          // Apply decorations after editor mounts
+          if (decorations.length > 0) {
+            editor.deltaDecorations([], decorations);
           }
-          .monaco-highlight-search-term-line {
-            background-color: rgba(254, 243, 192, 0.1);
+          
+          // Apply dark theme to editor container
+          const editorElement = editor.getDomNode();
+          if (editorElement) {
+            editorElement.classList.add('monaco-editor-dark-custom');
           }
-        `}
-      </style>
-      <EuiPanel hasBorder paddingSize="none" style={{ overflow: 'hidden' }}>
-        <CodeEditor
-          languageId="json"
-          value={jsonString}
-          onChange={() => {}}
-          editorDidMount={(editor) => {
-            // Apply decorations after editor mounts
-            if (decorations.length > 0) {
-              editor.deltaDecorations([], decorations);
-            }
-          }}
-          options={{
-            readOnly: true,
-            lineNumbers: 'on',
-            fontSize: 13,
-            minimap: { enabled: false },
-            scrollBeyondLastLine: false,
-            wordWrap: 'on',
-            wrappingIndent: 'indent',
-            automaticLayout: true,
-            fixedOverflowWidgets: true,
-            folding: true,
-            renderLineHighlight: 'none',
-            scrollbar: {
-              vertical: 'auto',
-              horizontal: 'auto',
-            },
-          }}
-          height="500px"
-        />
-      </EuiPanel>
-    </>
+        }}
+        options={{
+          readOnly: true,
+          lineNumbers: 'on',
+          fontSize: 13,
+          fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+          wordWrap: 'on',
+          wrappingIndent: 'indent',
+          automaticLayout: true,
+          fixedOverflowWidgets: true,
+          folding: true,
+          renderLineHighlight: 'none',
+          scrollbar: {
+            vertical: 'auto',
+            horizontal: 'auto',
+            useShadows: false,
+            verticalScrollbarSize: 10,
+            horizontalScrollbarSize: 10,
+          },
+          theme: 'vs-dark',
+          matchBrackets: 'always',
+          bracketPairColorization: {
+            enabled: true,
+          },
+        }}
+        height="500px"
+      />
+    </EuiPanel>
   );
 };
 
@@ -280,7 +289,14 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
                   <EuiText size="s">
                     <strong>Raw value:</strong>
                   </EuiText>
-                  <pre style={{ fontSize: '12px', overflow: 'auto' }}>
+                  <pre style={{ 
+                    fontSize: '12px', 
+                    overflow: 'auto',
+                    backgroundColor: '#2d2a2e',
+                    color: '#fcfcfa',
+                    padding: '12px',
+                    borderRadius: '4px',
+                  }}>
                     {typeof currentFieldData.value === 'string' 
                       ? currentFieldData.value 
                       : JSON.stringify(currentFieldData.value)}
@@ -294,16 +310,30 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
                   formattedValue={currentFieldData.formattedValue}
                 />
               ) : (
-                // No highlights, show normal Monaco editor
-                <EuiPanel hasBorder paddingSize="none" style={{ overflow: 'hidden' }}>
+                // No highlights, show normal Monaco editor with dark theme
+                <EuiPanel 
+                  hasBorder 
+                  paddingSize="none" 
+                  style={{ 
+                    overflow: 'hidden',
+                    backgroundColor: '#2d2a2e',
+                  }}
+                >
                   <CodeEditor
                     languageId="json"
                     value={JSON.stringify(currentFieldData.formattedValue, null, 2)}
                     onChange={() => {}}
+                    editorDidMount={(editor) => {
+                      const editorElement = editor.getDomNode();
+                      if (editorElement) {
+                        editorElement.classList.add('monaco-editor-dark-custom');
+                      }
+                    }}
                     options={{
                       readOnly: true,
                       lineNumbers: 'on',
                       fontSize: 13,
+                      fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
                       minimap: { enabled: false },
                       scrollBeyondLastLine: false,
                       wordWrap: 'on',
@@ -315,6 +345,14 @@ export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView 
                       scrollbar: {
                         vertical: 'auto',
                         horizontal: 'auto',
+                        useShadows: false,
+                        verticalScrollbarSize: 10,
+                        horizontalScrollbarSize: 10,
+                      },
+                      theme: 'vs-dark',
+                      matchBrackets: 'always',
+                      bracketPairColorization: {
+                        enabled: true,
                       },
                     }}
                     height="500px"

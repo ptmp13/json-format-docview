@@ -36,19 +36,9 @@ export class JsonContentPlugin implements Plugin<void, void, SetupDeps, CoreOpts
 		deps.dataViewFieldEditor?.fieldFormatEditors
 			?.register(JsonFormatEditorFactory)
 
-    deps.uiActions.registerAction({
-      id: 'my-row-click-logger',
-      type: 'my-row-click-logger',
-      getDisplayName: () => 'Log Row',
-      isCompatible: async () => true,
-      execute: async (ctx) => {
-        console.log('🟢 ROW CLICKED', ctx);
-      },
-    });
-
     deps.unifiedDocViewer.registry.add({
-      id: 'my_view',
-      title: 'My View',
+      id: 'json-fields-viewer',
+      title: 'JSON Fields',
       order: 10,
       render: MyFlyoutWrapper
     });

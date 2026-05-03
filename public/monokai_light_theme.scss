@@ -1,0 +1,79 @@
+/* monokai_light_theme.css */
+
+/* Monokai Pro Light Theme for Monaco Editor */
+.monaco-editor-light-custom {
+  background-color: #ffffff !important;
+}
+
+.monaco-editor-light-custom .monaco-editor-background {
+  background-color: #ffffff !important;
+}
+
+.monaco-editor-light-custom .margin {
+  background-color: #ffffff !important;
+}
+
+.monaco-editor-light-custom .view-line {
+  color: #2d2a2e !important;
+}
+
+/* Line numbers */
+.monaco-editor-light-custom .line-numbers {
+  color: #b3b1b3 !important;
+}
+
+/* Scrollbar */
+.monaco-editor-light-custom .monaco-scrollable-element > .scrollbar > .slider {
+  background: rgba(45, 42, 46, 0.2) !important;
+}
+
+.monaco-editor-light-custom .monaco-scrollable-element > .scrollbar > .slider:hover {
+  background: rgba(45, 42, 46, 0.3) !important;
+}
+
+/* Selection */
+.monaco-editor-light-custom .selected-text {
+  background-color: #e8e7e8 !important;
+}
+
+/* Cursor */
+.monaco-editor-light-custom .cursor {
+  background-color: #2d2a2e !important;
+}
+
+/* JSON Syntax Highlighting - Monokai Pro Light */
+.monaco-editor-light-custom .mtk1 { color: #2d2a2e !important; } /* Default text */
+.monaco-editor-light-custom .mtk3 { color: #0084a5 !important; } /* Strings */
+.monaco-editor-light-custom .mtk4 { color: #7847bd !important; } /* Numbers */
+.monaco-editor-light-custom .mtk5 { color: #d6127a !important; } /* Keywords */
+.monaco-editor-light-custom .mtk6 { color: #66841b !important; } /* Property names */
+.monaco-editor-light-custom .mtk7 { color: #0084a5 !important; } /* Strings */
+.monaco-editor-light-custom .mtk8 { color: #d88d00 !important; } /* Functions */
+.monaco-editor-light-custom .mtk9 { color: #88888c !important; } /* Comments */
+.monaco-editor-light-custom .mtk10 { color: #d6127a !important; } /* Keywords/Operators */
+.monaco-editor-light-custom .mtk11 { color: #7847bd !important; } /* Numbers */
+.monaco-editor-light-custom .mtk12 { color: #0084a5 !important; } /* Strings */
+
+/* JSON specific token colors */
+.monaco-editor-light-custom .mtk22 { color: #0084a5 !important; } /* String values */
+.monaco-editor-light-custom .mtk7.property-name { color: #d6127a !important; } /* Property keys */
+
+/* Brackets and braces */
+.monaco-editor-light-custom .bracket-match {
+  background-color: rgba(216, 141, 0, 0.2) !important;
+  border: 1px solid #d88d00 !important;
+}
+
+/* Search term highlights - Bright orange for visibility on light background */
+.monaco-highlight-search-term {
+  background-color: #ffffff !important;
+  color: #ffffff !important;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font-weight: 700 !important;
+  box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.3) !important;
+}
+
+.monaco-highlight-search-term-line {
+  background-color: rgba(255, 149, 0, 0.08) !important;
+}
