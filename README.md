@@ -5,26 +5,20 @@
 field_formats id is __'json'__
 3. Test it work in Kibana 9.3.0
 
-![Only DocView Tab](/images/onlyDocView-1.png)
+![DocView Tab 1](/images/docview-highlight.png)
+![DocView Tab 2(EuiCode)](/images/docview-highlight.png)
 
 
-# JSON Content
+# Kibana
 
-A Kibana plugin to pretty print JSON strings in the Kibana Discover/Logs tab. This doesn't index the JSON content, it just pretty prints & highlights it in the console for easier reading.
-
-Built for Kibana 8.15.0.
-
-I built this plugin because neither did I want to index the JSON content nor did I want to copy the JSON content to a JSON linter to pretty print it. After hours of searching, I couldn't find any way to pretty print JSONs in the Discover/Logs that did this, so I built one myself. If I missed something obvious, feel free to reach out.
+Just view json content of field. on Docview Tab.
 
 ## Installation
-
-The plugin archive is pushed to the `build` folder & committed to the repository (Too lazy to set up a CI/CD pipeline for this).
 
 1. Install in Kibana via:
    ```bash
    bin/kibana-plugin install https://github.com/ptmp13/kibana-json-content/releases/download/v9.3.0/jsonContent-9.3.0.zip
    ```
-2. If you're running on Kubernetes, you can use [this guide](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-custom-images.html).
 
 ## Usage
 
@@ -33,11 +27,6 @@ The plugin archive is pushed to the `build` folder & committed to the repository
    ![Set format](/images/set-format.png)
 3. Click save & close the field editor.
 4. Now, you can see the JSON content pretty printed in the console!
-
-Before:
-   ![Raw JSON](/images/raw-json.png)
-After:
-   ![Pretty printed JSON](/images/pretty-printed-json.png)
 
 ## Development
 
