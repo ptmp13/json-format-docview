@@ -6,7 +6,7 @@ field_formats id is __'json'__
 3. Test it work in Kibana 9.3.0
 
 ![DocView Tab 1](/images/docview-highlight.png)
-![DocView Tab 2(EuiCode)](/images/docview-highlight.png)
+![DocView Tab 2(EuiCode)](/images/docview-euicode.png)
 
 
 # Kibana
@@ -37,3 +37,10 @@ Just view json content of field. on Docview Tab.
 5. Setup the plugin: `yarn bootstrap`
 6. Start the dev build: `yarn dev --watch` (watch is optional)
 7. To build for production, run: `yarn build`
+
+
+#### Based on
+
+I start from here. But the color json format in all tabs was a bad decision in my case...
+
+https://github.com/adiwajshing/kibana-json-content
