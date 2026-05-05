@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, ReactElement } from 'react';
 import {
   EuiPanel,
   EuiSpacer,
@@ -12,14 +12,10 @@ import {
 } from '@elastic/eui';
 import type { DataView } from '@kbn/data-views-plugin/public';
 import { CodeEditor } from '@kbn/code-editor';
+import type { DocViewRenderProps } from '@kbn/unified-doc-viewer-plugin/public';
 
 // Import the CSS file
 import '../public/monokai_theme.scss';
-
-interface MyFlyoutWrapperProps {
-  hit: any;
-  dataView: DataView;
-}
 
 // Custom Highlighted CodeEditor Component
 const HighlightedCodeEditor: React.FC<{
@@ -128,7 +124,7 @@ const HighlightedCodeEditor: React.FC<{
   );
 };
 
-export const MyFlyoutWrapper: React.FC<MyFlyoutWrapperProps> = ({ hit, dataView }) => {
+export const MyFlyoutWrapper = ({ hit, dataView }: DocViewRenderProps): ReactElement => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [selectedField, setSelectedField] = useState<string | null>(null);
 

@@ -1,19 +1,18 @@
 {
   "id": "jsonContent",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kibanaVersion": "kibana",
   "owner": {
-    "name": "Adhiraj Singh",
+    "name": "Petr Degtiarev",
     "githubTeam": ""
   },
-  "description": "Pretty print JSON strings in Discover/Logs",
+  "description": "Add DocView for json fields",
   "server": true,
   "ui": true,
   "requiredPlugins": [
     "fieldFormats",
     "dataViewFieldEditor",
     "unifiedDocViewer",
-    "uiActions",
     "discover",
     "data"
   ],

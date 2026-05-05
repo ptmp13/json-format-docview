@@ -22,7 +22,7 @@ Just view json content of field. on Docview Tab.
 
 ## Usage
 
-1. Open your Discover/Logs tab & select the field you'd like to print as JSON. This must be some string field. See this [guide](https://www.elastic.co/guide/en/kibana/8.15/managing-data-views.html#managing-fields)
+1. Open your Discover/Logs tab & select the field you'd like to print as JSON. This must be some string field. See this [guide](https://www.elastic.co/guide/en/kibana/managing-data-views.html#managing-fields)
 2. Enable the "Set format", and select JSON:
    ![Set format](/images/set-format.png)
 3. Click save & close the field editor.
@@ -30,11 +30,11 @@ Just view json content of field. on Docview Tab.
 
 ## Development
 
-1. Setup the Kibana development environment, read [here](https://github.com/elastic/kibana/blob/main/dev_docs/getting_started/setting_up_a_development_env.mdx). Use branch `8.15.0` or some `8.x.x` branch.
+1. Setup the Kibana development environment, read [here](https://github.com/elastic/kibana/blob/main/dev_docs/getting_started/setting_up_a_development_env.mdx). Use branch `9.3.0` or some `9.x.x` branch.
 2. In the Kibana root directory, run `cd plugins`
-3. Clone this repository there: `git clone https://github.com/adiwajshing/json-content.git`
-4. Switch to this plugin's directory: `cd json-content`
-5. Setup the plugin: `yarn bootstrap`
+3. Clone this repository there: `git clone https://github.com/ptmp13/kibana-json-content.git`
+4. Switch to kibana directory: `cd kibana;yarn set version 1.22.22;yarn kbn bootstrap`
+5. Setup the plugin: `cd kibana-json-content;yarn set version 1.22.22;yarn bootstrap`
 6. Start the dev build: `yarn dev --watch` (watch is optional)
 7. To build for production, run: `yarn build`
 

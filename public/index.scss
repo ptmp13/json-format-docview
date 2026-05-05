@@ -1,33 +1,79 @@
-.json-field {
-	color: #343741;
-	overflow: auto;
-	text-wrap: wrap;
-	white-space: pre-wrap;
-}
-.json-field .string { color: #bd271e; }
-.json-field .number { color: #bd271e; }
-.json-field .boolean { color: #c4407c; }
-.json-field .null { color: #e06c75; }
-.json-field .key { color: #0071c2; }
+/* monokai_theme.css */
 
-///* Light theme */
-//.json-field {
-//  color: #343741;
-//  background: #f5f7fa;
-//}
-//.json-field .string { color: #bd271e; }
-//.json-field .number { color: #bd271e; }
-//.json-field .boolean { color: #c4407c; }
-//.json-field .null { color: #e06c75; }
-//.json-field .key { color: #0071c2; }
-//
-///* Dark theme */
-//.euiTheme-dark .json-field {
-//  color: #d4d7db;
-//  background: #1d1e24;
-//}
-//.euiTheme-dark .json-field .string { color: #9cdcfe; }
-//.euiTheme-dark .json-field .number { color: #b5cea8; }
-//.euiTheme-dark .json-field .boolean { color: #c586c0; }
-//.euiTheme-dark .json-field .null { color: #d19a66; }
-//.euiTheme-dark .json-field .key { color: #4fc1ff; }
+/* Monokai Pro Dark Theme for Monaco Editor */
+.monaco-editor-dark-custom {
+  background-color: #2d2a2e !important;
+}
+
+.monaco-editor-dark-custom .monaco-editor-background {
+  background-color: #2d2a2e !important;
+}
+
+.monaco-editor-dark-custom .margin {
+  background-color: #2d2a2e !important;
+}
+
+.monaco-editor-dark-custom .view-line {
+  color: #fcfcfa !important;
+}
+
+/* Line numbers */
+.monaco-editor-dark-custom .line-numbers {
+  color: #5b595c !important;
+}
+
+/* Scrollbar */
+.monaco-editor-dark-custom .monaco-scrollable-element > .scrollbar > .slider {
+  background: rgba(252, 252, 250, 0.2) !important;
+}
+
+.monaco-editor-dark-custom .monaco-scrollable-element > .scrollbar > .slider:hover {
+  background: rgba(252, 252, 250, 0.3) !important;
+}
+
+/* Selection */
+.monaco-editor-dark-custom .selected-text {
+  background-color: #423f42 !important;
+}
+
+/* Cursor */
+.monaco-editor-dark-custom .cursor {
+  background-color: #fcfcfa !important;
+}
+
+/* JSON Syntax Highlighting - Monokai Pro */
+.monaco-editor-dark-custom .mtk1 { color: #fcfcfa !important; } /* Default text */
+.monaco-editor-dark-custom .mtk3 { color: #78dce8 !important; } /* Strings */
+.monaco-editor-dark-custom .mtk4 { color: #ab9df2 !important; } /* Numbers */
+.monaco-editor-dark-custom .mtk5 { color: #ff6188 !important; } /* Keywords */
+.monaco-editor-dark-custom .mtk6 { color: #a9dc76 !important; } /* Property names */
+.monaco-editor-dark-custom .mtk7 { color: #78dce8 !important; } /* Strings */
+.monaco-editor-dark-custom .mtk8 { color: #ffd866 !important; } /* Functions */
+.monaco-editor-dark-custom .mtk9 { color: #939293 !important; } /* Comments */
+.monaco-editor-dark-custom .mtk10 { color: #ff6188 !important; } /* Keywords/Operators */
+.monaco-editor-dark-custom .mtk11 { color: #ab9df2 !important; } /* Numbers */
+.monaco-editor-dark-custom .mtk12 { color: #78dce8 !important; } /* Strings */
+
+/* JSON specific token colors */
+.monaco-editor-dark-custom .mtk22 { color: #78dce8 !important; } /* String values */
+.monaco-editor-dark-custom .mtk7.property-name { color: #ff6188 !important; } /* Property keys */
+
+/* Brackets and braces */
+.monaco-editor-dark-custom .bracket-match {
+  background-color: rgba(255, 216, 102, 0.2) !important;
+  border: 1px solid #ffd866 !important;
+}
+
+/* Search term highlights - Yellow/Gold for visibility on dark background */
+.monaco-highlight-search-term {
+  background-color: #ffd866 !important;
+  color: #2d2a2e !important;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font-weight: 700 !important;
+  box-shadow: 0 0 0 2px rgba(255, 216, 102, 0.3) !important;
+}
+
+.monaco-highlight-search-term-line {
+  background-color: rgba(255, 216, 102, 0.08) !important;
+}
