@@ -17,7 +17,7 @@ Just view json content of field. on Docview Tab.
 
 1. Install in Kibana via:
    ```bash
-   bin/kibana-plugin install https://github.com/ptmp13/kibana-json-content/releases/download/v9.3.0/jsonContent-9.3.0.zip
+   bin/kibana-plugin install https://github.com/ptmp13/json-format-docview/releases/download/v9.3.0/jsonContent-codecolor-9.3.0.zip
    ```
 
 ## Usage
