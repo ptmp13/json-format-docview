@@ -9,21 +9,18 @@ import {
   EuiBadge,
   EuiFlexGroup,
   EuiFlexItem,
+  EuiCodeBlock,
 } from '@elastic/eui';
 import type { DataView } from '@kbn/data-views-plugin/public';
-import { CodeEditor } from '@kbn/code-editor';
 import type { DocViewRenderProps } from '@kbn/unified-doc-viewer-plugin/public';
 
-// Import the CSS file
-import '../public/monokai_theme.scss';
-
-// Custom Highlighted CodeEditor Component
-const HighlightedCodeEditor: React.FC<{
+// Custom Highlighted Code Component
+const HighlightedCode: React.FC<{
   value: string;
   highlightedValue: string;
   formattedValue: any;
 }> = ({ value, highlightedValue, formattedValue }) => {
-  const { jsonString, decorations } = useMemo(() => {
+  const highlightedJson = useMemo(() => {
     const jsonStr = JSON.stringify(formattedValue, null, 2);
     
     // Find highlighted terms
@@ -31,96 +28,35 @@ const HighlightedCodeEditor: React.FC<{
     const matches = [...highlightedValue.matchAll(highlightRegex)];
     
     if (matches.length === 0) {
-      return { jsonString: jsonStr, decorations: [] };
+      return jsonStr;
     }
     
-    // Find all occurrences of highlighted terms in the JSON string
-    const decorationsList: any[] = [];
-    const lines = jsonStr.split('\n');
+    // Replace matches with highlighted spans
+    let highlightedStr = jsonStr;
+    const uniqueTerms = Array.from(new Set(matches.map(m => m[1])));
     
-    matches.forEach((match) => {
-      const term = match[1];
-      
-      lines.forEach((line, lineIndex) => {
-        let columnIndex = 0;
-        let searchIndex = 0;
-        
-        while ((searchIndex = line.indexOf(term, columnIndex)) !== -1) {
-          decorationsList.push({
-            range: {
-              startLineNumber: lineIndex + 1,
-              startColumn: searchIndex + 1,
-              endLineNumber: lineIndex + 1,
-              endColumn: searchIndex + term.length + 1,
-            },
-            options: {
-              inlineClassName: 'monaco-highlight-search-term',
-              className: 'monaco-highlight-search-term-line',
-            },
-          });
-          
-          columnIndex = searchIndex + term.length;
-        }
-      });
+    uniqueTerms.forEach((term) => {
+      const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedTerm, 'g');
+      highlightedStr = highlightedStr.replace(
+        regex,
+        `<mark style="background-color: #ffc107; padding: 2px 4px; border-radius: 2px;">${term}</mark>`
+      );
     });
     
-    return { jsonString: jsonStr, decorations: decorationsList };
+    return highlightedStr;
   }, [formattedValue, highlightedValue]);
 
   return (
-    <EuiPanel 
-      hasBorder 
-      paddingSize="none" 
-      style={{ 
-        overflow: 'hidden',
-        backgroundColor: '#2d2a2e',
-      }}
+    <EuiCodeBlock
+      language="json"
+      fontSize="m"
+      paddingSize="m"
+      isCopyable
+      overflowHeight={500}
     >
-      <CodeEditor
-        languageId="json"
-        value={jsonString}
-        onChange={() => {}}
-        editorDidMount={(editor) => {
-          // Apply decorations after editor mounts
-          if (decorations.length > 0) {
-            editor.deltaDecorations([], decorations);
-          }
-          
-          // Apply dark theme to editor container
-          const editorElement = editor.getDomNode();
-          if (editorElement) {
-            editorElement.classList.add('monaco-editor-dark-custom');
-          }
-        }}
-        options={{
-          readOnly: true,
-          lineNumbers: 'on',
-          fontSize: 13,
-          fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          wordWrap: 'on',
-          wrappingIndent: 'indent',
-          automaticLayout: true,
-          fixedOverflowWidgets: true,
-          folding: true,
-          renderLineHighlight: 'none',
-          scrollbar: {
-            vertical: 'auto',
-            horizontal: 'auto',
-            useShadows: false,
-            verticalScrollbarSize: 10,
-            horizontalScrollbarSize: 10,
-          },
-          theme: 'vs-dark',
-          matchBrackets: 'always',
-          bracketPairColorization: {
-            enabled: true,
-          },
-        }}
-        height="500px"
-      />
-    </EuiPanel>
+      <div dangerouslySetInnerHTML={{ __html: highlightedJson }} />
+    </EuiCodeBlock>
   );
 };
 
@@ -285,75 +221,30 @@ export const MyFlyoutWrapper = ({ hit, dataView }: DocViewRenderProps): ReactEle
                   <EuiText size="s">
                     <strong>Raw value:</strong>
                   </EuiText>
-                  <pre style={{ 
-                    fontSize: '12px', 
-                    overflow: 'auto',
-                    backgroundColor: '#2d2a2e',
-                    color: '#fcfcfa',
-                    padding: '12px',
-                    borderRadius: '4px',
-                  }}>
+                  <EuiCodeBlock fontSize="m" paddingSize="m">
                     {typeof currentFieldData.value === 'string' 
                       ? currentFieldData.value 
                       : JSON.stringify(currentFieldData.value)}
-                  </pre>
+                  </EuiCodeBlock>
                 </EuiPanel>
               ) : currentFieldData.highlightedValue ? (
-                // Show highlighted version with Monaco
-                <HighlightedCodeEditor
+                // Show highlighted version
+                <HighlightedCode
                   value={currentFieldData.value}
                   highlightedValue={currentFieldData.highlightedValue}
                   formattedValue={currentFieldData.formattedValue}
                 />
               ) : (
-                // No highlights, show normal Monaco editor with dark theme
-                <EuiPanel 
-                  hasBorder 
-                  paddingSize="none" 
-                  style={{ 
-                    overflow: 'hidden',
-                    backgroundColor: '#2d2a2e',
-                  }}
+                // No highlights, show normal code block
+                <EuiCodeBlock
+                  language="json"
+                  fontSize="m"
+                  paddingSize="m"
+                  isCopyable
+                  overflowHeight={500}
                 >
-                  <CodeEditor
-                    languageId="json"
-                    value={JSON.stringify(currentFieldData.formattedValue, null, 2)}
-                    onChange={() => {}}
-                    editorDidMount={(editor) => {
-                      const editorElement = editor.getDomNode();
-                      if (editorElement) {
-                        editorElement.classList.add('monaco-editor-dark-custom');
-                      }
-                    }}
-                    options={{
-                      readOnly: true,
-                      lineNumbers: 'on',
-                      fontSize: 13,
-                      fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-                      minimap: { enabled: false },
-                      scrollBeyondLastLine: false,
-                      wordWrap: 'on',
-                      wrappingIndent: 'indent',
-                      automaticLayout: true,
-                      fixedOverflowWidgets: true,
-                      folding: true,
-                      renderLineHighlight: 'none',
-                      scrollbar: {
-                        vertical: 'auto',
-                        horizontal: 'auto',
-                        useShadows: false,
-                        verticalScrollbarSize: 10,
-                        horizontalScrollbarSize: 10,
-                      },
-                      theme: 'vs-dark',
-                      matchBrackets: 'always',
-                      bracketPairColorization: {
-                        enabled: true,
-                      },
-                    }}
-                    height="500px"
-                  />
-                </EuiPanel>
+                  {JSON.stringify(currentFieldData.formattedValue, null, 2)}
+                </EuiCodeBlock>
               )}
             </>
           )}
