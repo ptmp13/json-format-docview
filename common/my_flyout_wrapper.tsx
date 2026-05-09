@@ -68,59 +68,67 @@ const HighlightedCodeEditor: React.FC<{
   }, [formattedValue, highlightedValue]);
 
   return (
-    <EuiPanel 
-      hasBorder 
-      paddingSize="none" 
-      style={{ 
-        overflow: 'hidden',
-        backgroundColor: '#2d2a2e',
-      }}
-    >
-      <CodeEditor
-        languageId="json"
-        value={jsonString}
-        onChange={() => {}}
-        editorDidMount={(editor) => {
-          // Apply decorations after editor mounts
-          if (decorations.length > 0) {
-            editor.deltaDecorations([], decorations);
-          }
-          
-          // Apply dark theme to editor container
-          const editorElement = editor.getDomNode();
-          if (editorElement) {
-            editorElement.classList.add('monaco-editor-dark-custom');
-          }
+    <div className="monaco-editor-dark-custom">
+      <EuiPanel 
+        hasBorder 
+        paddingSize="none" 
+        style={{ 
+          overflow: 'hidden',
+          backgroundColor: '#2d2a2e',
         }}
-        options={{
-          readOnly: true,
-          lineNumbers: 'on',
-          fontSize: 13,
-          fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          wordWrap: 'on',
-          wrappingIndent: 'indent',
-          automaticLayout: true,
-          fixedOverflowWidgets: true,
-          folding: true,
-          renderLineHighlight: 'none',
-          scrollbar: {
-            vertical: 'auto',
-            horizontal: 'auto',
-            useShadows: false,
-            verticalScrollbarSize: 10,
-            horizontalScrollbarSize: 10,
-          },
-          theme: 'vs-dark',
-          matchBrackets: 'always',
-          bracketPairColorization: {
-            enabled: true,
-          },
-        }}
-        height="500px"
-      />
-    </EuiPanel>
+      >
+        <CodeEditor
+          languageId="json"
+          value={jsonString}
+          onChange={() => {}}
+          editorDidMount={(editor) => {
+            // Apply dark theme to editor container FIRST
+            const editorElement = editor.getDomNode();
+            if (editorElement) {
+              // Find the actual editor container
+              const editorContainer = editorElement.querySelector('.monaco-editor');
+              if (editorContainer) {
+                editorContainer.classList.add('monaco-editor-dark-custom');
+              }
+              // Also add to the root element
+              editorElement.classList.add('monaco-editor-dark-custom');
+            }
+            
+            // Apply decorations after editor mounts
+            if (decorations.length > 0) {
+              editor.deltaDecorations([], decorations);
+            }
+          }}
+          options={{
+            readOnly: true,
+            lineNumbers: 'on',
+            fontSize: 13,
+            fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
+            wrappingIndent: 'indent',
+            automaticLayout: true,
+            fixedOverflowWidgets: true,
+            folding: true,
+            renderLineHighlight: 'none',
+            scrollbar: {
+              vertical: 'auto',
+              horizontal: 'auto',
+              useShadows: false,
+              verticalScrollbarSize: 10,
+              horizontalScrollbarSize: 10,
+            },
+            theme: 'vs-dark',
+            matchBrackets: 'always',
+            bracketPairColorization: {
+              enabled: true,
+            },
+          }}
+          height="500px"
+        />
+      </EuiPanel>
+    </div>
   );
 };
 
@@ -307,53 +315,61 @@ export const MyFlyoutWrapper = ({ hit, dataView }: DocViewRenderProps): ReactEle
                 />
               ) : (
                 // No highlights, show normal Monaco editor with dark theme
-                <EuiPanel 
-                  hasBorder 
-                  paddingSize="none" 
-                  style={{ 
-                    overflow: 'hidden',
-                    backgroundColor: '#2d2a2e',
-                  }}
-                >
-                  <CodeEditor
-                    languageId="json"
-                    value={JSON.stringify(currentFieldData.formattedValue, null, 2)}
-                    onChange={() => {}}
-                    editorDidMount={(editor) => {
-                      const editorElement = editor.getDomNode();
-                      if (editorElement) {
-                        editorElement.classList.add('monaco-editor-dark-custom');
-                      }
+                <div className="monaco-editor-dark-custom">
+                  <EuiPanel 
+                    hasBorder 
+                    paddingSize="none" 
+                    style={{ 
+                      overflow: 'hidden',
+                      backgroundColor: '#2d2a2e',
                     }}
-                    options={{
-                      readOnly: true,
-                      lineNumbers: 'on',
-                      fontSize: 13,
-                      fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-                      minimap: { enabled: false },
-                      scrollBeyondLastLine: false,
-                      wordWrap: 'on',
-                      wrappingIndent: 'indent',
-                      automaticLayout: true,
-                      fixedOverflowWidgets: true,
-                      folding: true,
-                      renderLineHighlight: 'none',
-                      scrollbar: {
-                        vertical: 'auto',
-                        horizontal: 'auto',
-                        useShadows: false,
-                        verticalScrollbarSize: 10,
-                        horizontalScrollbarSize: 10,
-                      },
-                      theme: 'vs-dark',
-                      matchBrackets: 'always',
-                      bracketPairColorization: {
-                        enabled: true,
-                      },
-                    }}
-                    height="500px"
-                  />
-                </EuiPanel>
+                  >
+                    <CodeEditor
+                      languageId="json"
+                      value={JSON.stringify(currentFieldData.formattedValue, null, 2)}
+                      onChange={() => {}}
+                      editorDidMount={(editor) => {
+                        const editorElement = editor.getDomNode();
+                        if (editorElement) {
+                          // Find the actual editor container
+                          const editorContainer = editorElement.querySelector('.monaco-editor');
+                          if (editorContainer) {
+                            editorContainer.classList.add('monaco-editor-dark-custom');
+                          }
+                          // Also add to the root element
+                          editorElement.classList.add('monaco-editor-dark-custom');
+                        }
+                      }}
+                      options={{
+                        readOnly: true,
+                        lineNumbers: 'on',
+                        fontSize: 13,
+                        fontFamily: "'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                        wordWrap: 'on',
+                        wrappingIndent: 'indent',
+                        automaticLayout: true,
+                        fixedOverflowWidgets: true,
+                        folding: true,
+                        renderLineHighlight: 'none',
+                        scrollbar: {
+                          vertical: 'auto',
+                          horizontal: 'auto',
+                          useShadows: false,
+                          verticalScrollbarSize: 10,
+                          horizontalScrollbarSize: 10,
+                        },
+                        theme: 'vs-dark',
+                        matchBrackets: 'always',
+                        bracketPairColorization: {
+                          enabled: true,
+                        },
+                      }}
+                      height="500px"
+                    />
+                  </EuiPanel>
+                </div>
               )}
             </>
           )}
