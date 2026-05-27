@@ -1,4 +1,4 @@
-# Some fix
+# Kibana JSON Plugin (DocView)
 
 1. Format JSON only in DocView Tab.
 2. Add Server Side for import from terraform like using elasticstack_kibana_data_view module.
